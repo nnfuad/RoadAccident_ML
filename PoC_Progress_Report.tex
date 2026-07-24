@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{titlesec}
+
+\title{\textbf{Progress Report: Proof of Concept Pipeline} \\ 
+\large \textit{Multiclass Injury Severity Prediction in Highway and Non-Highway Crashes in Bangladesh Using Explainable Machine Learning}}
+\author{Thesis Progress Update}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Primary Goal}
+The primary objective of this Proof of Concept (PoC) is to demonstrate a fully functional, end-to-end Machine Learning pipeline capable of predicting multi-class accident severity. By building and validating this architecture now, the computational framework is established and ready for immediate deployment once the localized Bangladesh crash dataset is fully procured. This ensures that the technical methodology is sound, robust, and capable of handling complex traffic data.
+
+\section{Dataset (Proxy Data)}
+Due to the pending procurement of local Bangladesh data, the open-source UK Stats19 dataset was utilized as a structural proxy. 
+\begin{itemize}
+    \item \textbf{Target Variable Mapping:} The \texttt{Accident\_Severity} column was mapped to the multiclass categories defined in the research scope: \textbf{1 = Fatal, 2 = Grievous, 3 = Simple}.
+    \item \textbf{Data Segmentation:} The dataset was successfully segmented into `Highway' and `Non-Highway' crashes using the \texttt{Road\_Type} variable (e.g., isolated Dual Carriageway data).
+    \item \textbf{Sampling:} A 20\% random sample of the Highway dataset was utilized to ensure rapid execution and demonstration of the PoC during the progress update.
+\end{itemize}
+
+\section{Pipeline Executed}
+The executed pipeline strictly follows the quantitative methodology outlined in the research proposal:
+\begin{enumerate}
+    \item \textbf{Preprocessing:} Missing values were imputed (median for numerical, dropping sparse nulls) and categorical variables (Weather, Light Conditions, Road Surface) were transformed using One-Hot Encoding.
+    \item \textbf{Data Splitting:} A stratified 80/20 train-test split was executed to maintain class distributions.
+    \item \textbf{Class Balancing (SMOTE):} Synthetic Minority Over-sampling Technique (SMOTE) was applied exclusively to the training set to resolve the severe class imbalance (underrepresented Fatal crashes) without introducing data leakage.
+    \item \textbf{Model Training:} A suite of advanced ensemble models was trained, including Logistic Regression (Baseline), Random Forest, XGBoost, LightGBM, and the primary model of interest: CatBoost.
+    \item \textbf{Hyperparameter Tuning:} \texttt{RandomizedSearchCV} was implemented for the CatBoost classifier to systematically optimize parameters (iterations, learning rate, depth) via cross-validation.
+\end{enumerate}
+
+\section{Results and Their Significance}
+The pipeline successfully outputs comprehensive evaluation matrices for each model:
+\begin{itemize}
+    \item \textbf{F1-Score, Precision, and Recall:} These metrics signify the model's accuracy while penalizing false positives and false negatives, which is critical when dealing with highly imbalanced accident data.
+    \item \textbf{Confusion Matrix:} This matrix visually signifies exactly where the model misclassifies data (e.g., predicting `Simple' when the actual crash was `Fatal'). It provides a practical view of predictive reliability.
+    \item \textbf{ROC-AUC (One-vs-Rest):} The Receiver Operating Characteristic - Area Under Curve signifies the model's discriminative ability. A high ROC-AUC means the model is highly capable of distinguishing a specific severity class (e.g., Fatal) from all other classes.
+\end{itemize}
+
+\section{Explainable AI (SHAP Values)}
+To resolve the "black-box" limitation of advanced ensemble models, SHapley Additive exPlanations (SHAP) were integrated into the pipeline. 
+\begin{itemize}
+    \item \textbf{What it signifies:} The SHAP summary plot quantifies the exact marginal contribution of each feature to the final prediction.
+    \item \textbf{Interpretation:} It visually explains \textit{why} the model predicted a `Fatal' outcome by showing which specific variables (e.g., high speed limits or poor lighting conditions) pushed the prediction toward or away from maximum severity. This provides actionable transparency for policymakers and traffic engineers.
+\end{itemize}
+
+\section{Relation to the Primary Proposal}
+This PoC directly satisfies the core computational promises made in the primary thesis proposal:
+\begin{itemize}
+    \item It adheres to the \textbf{Quantitative Methodology}, specifically the multi-class categorization and highway/non-highway segmentation.
+    \item It successfully implements the advanced ensemble modeling techniques, proving that XGBoost, LightGBM, and CatBoost can be smoothly integrated.
+    \item It validates the \textbf{Explainable AI framework}, proving that the final output will not only predict severity but also yield interpretable, data-driven insights for road safety interventions in Bangladesh.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,14 @@
+# Datasets
+UKaccident/
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+generate_notebook.py
+.ipynb_checkpoints/
+
+# Temporary files
+.DS_Store
+~$*
+catboost_info/
